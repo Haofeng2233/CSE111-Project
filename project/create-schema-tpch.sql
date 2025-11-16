@@ -1,3 +1,11 @@
+DROP TABLE IF EXISTS adoption_application;
+DROP TABLE IF EXISTS medical_record;
+DROP TABLE IF EXISTS adopter;
+DROP TABLE IF EXISTS pet;
+DROP TABLE IF EXISTS staff;
+DROP TABLE IF EXISTS organization;
+
+
 CREATE TABLE organization (
     orgn_id CHAR(6) NOT NULL,
     org_name VARCHAR(100) NOT NULL,
