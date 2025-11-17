@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS staff;
 DROP TABLE IF EXISTS organization;
 
 
-CREATE TABLE organization (
+CREATE TABLE IF NOT EXISTS organization (
     orgn_id CHAR(6) NOT NULL,
     org_name VARCHAR(100) NOT NULL,
     org_phone CHAR(15),
@@ -15,7 +15,7 @@ CREATE TABLE organization (
 );
 
 
-CREATE TABLE staff (
+CREATE TABLE IF NOT EXISTS staff (
     staff_id CHAR(6) NOT NULL,
     org_id CHAR(6) NOT NULL,
     staff_name VARCHAR(100) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE staff (
 );
 
 
-CREATE TABLE pet (
+CREATE TABLE IF NOT EXISTS pet (
     pet_id CHAR(6) NOT NULL,
     pet_name VARCHAR(50) NOT NULL,
     species VARCHAR(20) NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE pet (
 );
 
 
-CREATE TABLE adopter (
+CREATE TABLE IF NOT EXISTS adopter (
     adopter_name VARCHAR(100) NOT NULL,
     adopter_phone CHAR(15),
     adopter_email VARCHAR(100),
@@ -45,7 +45,7 @@ CREATE TABLE adopter (
 );
 
 
-CREATE TABLE medical_record (
+CREATE TABLE IF NOT EXISTS medical_record (
     record_id CHAR(7) NOT NULL,
     pet_id CHAR(6) NOT NULL,
     staff_id CHAR(6) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE medical_record (
 );
 
 
-CREATE TABLE adoption_application (
+CREATE TABLE IF NOT EXISTS adoption_application (
     app_id CHAR(7) NOT NULL,
     adopter_name VARCHAR(100) NOT NULL,
     staff_id CHAR(6) NOT NULL,
