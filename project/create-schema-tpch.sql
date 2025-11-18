@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS organization;
 
 
 CREATE TABLE IF NOT EXISTS organization (
-    orgn_id CHAR(6) NOT NULL,
+    org_id CHAR(6) NOT NULL,
     org_name VARCHAR(100) NOT NULL,
     org_phone CHAR(15),
     org_email VARCHAR(100),
