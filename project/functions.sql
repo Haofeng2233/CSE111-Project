@@ -243,16 +243,33 @@ ORDER BY o.org_id;
 
 
 --18
--- pets with multiple adoption application
-SELECT pet_id, COUNT(*)
-FROM adoption_application
-GROUP BY pet_id
-HAVING COUNT(*) > 1;
+-- find which staff(adoption coordinator) processed the most application
+SELECT 
+    s.staff_id,
+    s.staff_name,
+    COUNT(app.app_id) AS total_app
+FROM staff s
+LEFT JOIN adoption_application app ON s.staff_id = app.staff_id
+GROUP BY s.staff_id
+ORDER BY total_app DESC;
 
 
 --19
--- adopters who applied for more than 1 pet
-SELECT adopter_name, COUNT(*)
-FROM adoption_application
-GROUP BY adopter_name
-HAVING COUNT(*) > 1;
+-- number of pets each adopter has adopted
+SELECT 
+    a.adopter_name,
+    COUNT(p.pet_id)
+FROM adopter a
+JOIN adoption_application aa ON a.adopter_name = aa.adopter_name
+JOIN pet p ON aa.pet_id = p.pet_id
+WHERE aa.status = 'Approved'
+GROUP BY a.adopter_name;
+
+
+--20
+-- Pets that were approved but not marked as adopted
+SELECT p.pet_id, p.pet_name
+FROM pet p
+JOIN adoption_application app ON p.pet_id = app.pet_id
+WHERE app.status = 'Approved'
+    AND p.availability <> 'Adopted';
