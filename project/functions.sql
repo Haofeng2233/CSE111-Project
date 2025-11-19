@@ -192,27 +192,29 @@ WHERE pet.availability = 'Available';
     
 
 --13
--- number of adopters that have existing pets
-SELECT COUNT(DISTINCT adopter_name)
+-- name of adopters that have existing pets
+SELECT adopter_name
 FROM adoption_application
 WHERE has_existing_pets = 'Yes';
 
 
 --14
--- number of pets over 10 yrs old
-SELECT COUNT(pet_id)
-FROM pet
-WHERE age > 10;
+-- number of pets over 10 yrs old of each organization
+SELECT o.org_id, org_name, COUNT(pet_id)
+FROM organization o
+JOIN pet p ON o.org_id = p.org_id
+WHERE p.age > 10
+GROUP BY o.org_id;
 
 
 --15
--- number of unvaccinated pets of each organization
-SELECT o.org_id, org_name, COUNT(p.pet_id)
+-- ID of unvaccinated pets of each organization
+SELECT o.org_id, p.pet_id
 FROM organization o
 JOIN pet p ON o.org_id = p.org_id
 JOIN medical_record mr ON p.pet_id = mr.pet_id
 WHERE mr.vaccination_status = 'Not Vaccinated'
-GROUP BY o.org_id;
+ORDER BY o.org_id, p.pet_id;
 
 
 --16
