@@ -32,7 +32,7 @@ WHERE pet_id IN (
     WHERE app_id = 'APP010'
       AND status = 'Approved'
 );
--- UPDATE VERSION
+-- General Version
 -- update all pet availability when the latest application is approved
 UPDATE pet
 SET availability = 'Adopted'
@@ -72,7 +72,7 @@ AND pet_id NOT IN (
     FROM adoption_application
     WHERE status = 'Approved'
 );
--- UPDATE VERSION
+-- General Version
 -- Update all pet availabilities when the pet's applications only have denied status
 UPDATE pet
 SET availability = 'Available'
