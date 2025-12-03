@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adopter</title>
+    <style>
+        body {
+            font-size: 40px;
+        }
+
+        .big-button {
+            font-size: 40px;
+            padding: 20px 40px;
+            margin: 20px 0;
+        }
+
+        .search-input {
+            font-size: 40px;
+            padding: 10px;
+        }
+
+        .search-btn {
+            font-size: 40px;
+            padding: 15px 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Adopter</h1>
+
+    <div class="menu">
+        <ul>
+            <li><a href="/browse_pets" style="font-size: 40px;">View all pets</a></li>
+
+            <li>
+                <button class="big-button" onclick="toggleSearch()">Search for Application</button>
+
+                <div id="searchBox" style="display: none; margin-top: 20px;">
+                    <form action="/search_app" method="post">
+                    <input type="text" name="app_id" placeholder="Enter Application ID" class="search-input">
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
+
+
+                </div>
+            </li>
+
+            <li><a href="/" style="font-size: 40px;">Back to role selection</a></li>
+        </ul>
+    </div>
+
+    <script>
+        function toggleSearch() {
+            const box = document.getElementById("searchBox");
+            box.style.display = (box.style.display === "none") ? "block" : "none";
+        }
+    </script>
+
+</body>
+</html>

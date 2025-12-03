@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adopter</title>
+</head>
+<body>
+
+    <h1 style="font-size: 40px;">All available pets!</h1>
+
+    <table border="1" cellpadding="10" cellspacing="0" style="font-size: 28px;">
+        <tr>
+            <th>Pet ID</th>
+            <th>Name</th>
+            <th>Species</th>
+            <th>Breed</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Status</th>
+        </tr>
+
+        {% for pet in pets %}
+        <tr>
+            <td>{{ pet[0] }}</td>
+            <td><a href="/pet/{{ pet[0] }}">{{ pet[1] }}</a></td>
+            <td>{{ pet[2] }}</td>
+            <td>{{ pet[3] }}</td>
+            <td>{{ pet[4] }}</td>
+            <td>{{ pet[5] }}</td>
+            <td>{{ pet[6] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <ul>
+        <li><a href="/" style="font-size: 28px;">Back to role selection</a></li>
+    </ul>
+
+</body>
+</html>

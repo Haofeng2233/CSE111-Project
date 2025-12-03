@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pet Application</title>
+    <style>
+        body {
+            font-size: 40px;
+        }
+
+        input, textarea {
+            font-size: 40px;
+            width: 90%;
+        }
+
+        button {
+            font-size: 40px;
+            padding: 20px 40px;
+            margin-top: 20px;
+        }
+        .big-checkbox {
+        width: 40px;
+        height: 40px;
+        transform: scale(1.5);
+        margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Application for {{ pet[1] }}</h1>
+
+    <form action="/submit_application" method="POST">
+
+        <input type="hidden" name="pet_id" value="{{ pet[0] }}">
+
+        <p>
+            <label>Your Name:</label><br>
+            <input type="text" name="adopter_name" required>
+        </p>
+
+        <p>
+            <label>Why do you want to adopt this pet?</label><br>
+            <textarea name="reasoning" rows="4" required></textarea>
+        </p>
+
+        <p>
+            <label>
+                <input type="checkbox" name="has_existing_pets" class="big-checkbox">
+                I have existing pets
+            </label>
+        </p>
+
+        <button type="submit">Submit Application</button>
+
+    </form>
+
+    <br>
+    <a href="/browse_pets">← Back to All Pets</a>
+
+</body>
+</html>

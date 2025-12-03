@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Application Details</title>
+    <style>
+        body {
+            font-size: 40px;
+        }
+
+        button {
+            font-size: 40px;   
+            padding: 20px 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Application Details</h1>
+
+    {% if app and pet %}
+        <p><strong>Pet Name:</strong> {{ pet[1] }}</p>
+        <p><strong>Application ID:</strong> {{ app[0] }}</p>
+        <p><strong>Status:</strong> {{ app[4] }}</p>
+        <p class="field"><span class="label"><strong>Assigned Staff:</strong></span> {{ staff_name }}</p>
+    {% else %}
+        <p>No application found.</p>
+    {% endif %}
+
+    <br><br>
+    <a href="/adopter">← Back to Adopter page</a>
+
+</body>
+</html>
