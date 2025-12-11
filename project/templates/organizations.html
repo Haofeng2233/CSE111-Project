@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <style>
+        body {
+            font-size: 40px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <h1>Organizations Directory</h1>
+
+    <div class="menu">
+        <ul>
+            <li><a href="/new_org" style="font-size: 40px;">Create new org entry</a></li>
+
+    <table border="1" cellpadding="10" cellspacing="0" style="font-size: 28px;">
+        <tr>
+            <th>Org ID</th>
+            <th>Org Name</th>
+            <th>Org Phone</th>
+            <th>Org Email</th>
+            <th>Org Address</th>
+        </tr>
+
+        {% for org in orgs %}
+        <tr>
+            <td>{{ org[0] }}</td>
+            <td>{{ org[1] }}</a></td>
+            <td>{{ org[2] }}</td>
+            <td>{{ org[3] }}</td>
+            <td>{{ org[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+            <li><a href="/admin" style="font-size: 40px;">Back admin dashboard</a></li>
+            <li><a href="/" style="font-size: 40px;">Back to role selection</a></li>
+            
+
+        </ul>
+    </div>
+
+    
+
+</body>
+</html>

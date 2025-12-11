@@ -1,23 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin</title>
+    <title>Statistics</title>
     <style>
-        body {
-            font-size: 40px;
+        body { font-size: 40px; }
+
+        table { 
+            font-size: 28px; 
+            width: 100%; 
+            border-collapse: collapse; 
         }
-        
+
+        th, td { 
+            padding: 10px; 
+            border: 1px solid black; 
+        }
+
+        /* Collapsible container */
+        .collapsible-container {
+            overflow: hidden;
+            max-height: 0;
+        }
+
+        /* Expanded state */
+        .collapsible-container.open {
+            max-height: 2000px;
+        }
+
+        button {
+            font-size: 40px;
+            padding: 20px 40px;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Statistics</h1>
+<h1>Statistics</h1>
 
-    <div class="menu">
- 
-    </div>
 
-    
+<!-- 1. APPLICATION STATS -->
+<button onclick="toggleStats('statsContainer1')">Application Stats: Organizations</button>
+
+<div id="statsContainer1" class="collapsible-container">
+    <table>
+        <tr>
+            <th>Organization</th>
+            <th>Staff Name</th>
+            <th>Total Applications Received</th>
+            <th>Total Applications Processed</th>
+        </tr>
+
+        {% for stat in stats %}
+        <tr>
+            <td>{{ stat[0] }}</td>
+            <td>{{ stat[1] }}</td>
+            <td>{{ stat[2] }}</td>
+            <td>{{ stat[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+
+<!-- 2. PET + MEDICAL STATS-->
+
+<button onclick="toggleStats('statsContainer2')">Pet Stats: Organizations</button>
+
+<div id="statsContainer2" class="collapsible-container">
+    <table>
+        <tr>
+            <th>Organization</th>
+            <th>Total Pets</th>
+            <th>Total Dogs</th>
+            <th>Total Cats</th>
+            <th>Vaccinated Dogs</th>
+            <th>Vaccinated Cats</th>
+        </tr>
+
+        {% for p in pet_stats %}
+        <tr>
+            <td>{{ p[0] }}</td>
+            <td>{{ p[1] }}</td>
+            <td>{{ p[2] }}</td>
+            <td>{{ p[3] }}</td>
+            <td>{{ p[4] }}</td>
+            <td>{{ p[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+<br>
+<a href="/admin" style="font-size:40px;">Back to Admin</a>
+
+
+<script>
+function toggleStats(id) {
+    const container = document.getElementById(id);
+    container.classList.toggle("open");
+}
+</script>
 
 </body>
 </html>

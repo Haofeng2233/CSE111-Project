@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from database import add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id, get_apps_by_staff
+from database import get_pet_stats, get_application_stats, add_org, get_all_orgs, add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id, get_apps_by_staff
 
 app = Flask(__name__)
 
@@ -126,6 +126,39 @@ def new_staff():
 
     # GET request → show form
     return render_template("new_staff.html")
+
+# ADMIN ORGANIZATIONS
+@app.route("/orgs")
+def view_orgs():
+    orgs = get_all_orgs()
+    return render_template("organizations.html", orgs=orgs)
+
+@app.route("/new_org", methods=["GET", "POST"])
+def new_org():
+    if request.method == "POST":
+        org_name = request.form["org_name"]
+        org_phone = request.form["org_phone"]
+        org_email = request.form["org_email"]
+        org_address = request.form["org_address"]
+
+        add_org(org_name, org_phone, org_email, org_address)
+
+        return f"""
+        <p style='font-size:40px;'>
+            Organization <strong>{org_name}</strong> added!<br><br>
+            <a href='/admin' style='font-size:40px;'>Back to Admin</a>
+        </p>
+        """
+
+    return render_template("organizations_new.html")
+
+# ADMIN STATS
+@app.route("/view_statistics")
+def view_stats():
+    app_stats = get_application_stats()
+    pet_stats = get_pet_stats()
+    return render_template("stats.html", stats=app_stats, pet_stats=pet_stats)
+
 
 
 if __name__ == "__main__":

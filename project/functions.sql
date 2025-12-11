@@ -168,7 +168,7 @@ SELECT
     count(app_id) as total_applications
 FROM organization o 
 JOIN staff
-    ON o.orgn_id = staff.org_id
+    ON o.org_id = staff.org_id
 JOIN adoption_application aa 
     ON staff.staff_id = aa.staff_id
 GROUP BY o.org_name, staff.staff_name;
