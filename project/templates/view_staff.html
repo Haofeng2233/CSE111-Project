@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Staff Details</title>
+    <title>Staff Profile</title>
     <style>
         body {
             font-size: 40px;
@@ -15,12 +15,13 @@
 </head>
 
 <body>
-    <h1>Staff Details</h1>
+    <h1>Staff Profile</h1>
 
     {% if staff %}
         <p><strong>Staff ID:</strong> {{ staff[0] }}</p>
         <p><strong>Name:</strong> {{ staff[2] }}</p>
         <p><strong>Role:</strong> {{ staff[3] }}</p>
+        <p><strong>Organization:</strong> {{ org_name }}</p>
         <p><strong>Tel:</strong> {{ staff[4] }}</p>
         <p><strong>Email:</strong> {{ staff[5] }}</p>
 
@@ -29,7 +30,7 @@
         <ul>
             {% for a in apps %}
                 <li>
-                    <a href="/app/{{ a[0] }}?from=staff&staff_id={{ staff[0] }}">{{ a[0] }}</a>
+                    <a href="/staff_app/{{ a[0] }}">{{ a[0] }} </a>
                     -- Status: {{ a[1] }}
                 </li>
             {% endfor %}
@@ -43,6 +44,6 @@
     {% endif %}
 
     <br><br>
-    <a href="/staff">← Back to Staff Search</a>
+    <a href="/staff">← Back to Staff portal</a>
 </body>
 </html>

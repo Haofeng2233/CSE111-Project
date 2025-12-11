@@ -98,6 +98,25 @@ def get_apps_by_staff(staff_id):
     conn.close()
     return apps
 
+def get_mr_by_staff(staff_id):
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("""
+                SELECT record_id, checkup_date
+                FROM medical_record
+                WHERE staff_id = ?""", (staff_id,))
+    records = cur.fetchall()
+    conn.close()
+    return records
+
+def get_org_name(org_id):
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("SELECT org_name FROM organization WHERE org_id = ?", (org_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row[0] if row else None
+
 # ADMIN FUNCTIONS
 def get_all_staff():
     conn = connect()
@@ -135,6 +154,7 @@ def add_staff(staff_name, org_ID, staff_role, staff_phone, staff_email):
     conn.commit()
     conn.close()
     return new_staff
+
 
 # ADMIN ORGS
 def get_all_orgs():
@@ -225,9 +245,4 @@ def get_pet_stats():
     results = cur.fetchall()
     conn.close()
     return results
-
-
-
-
-
 

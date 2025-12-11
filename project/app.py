@@ -1,5 +1,6 @@
+import sqlite3
 from flask import Flask, render_template, request, redirect
-from database import get_pet_stats, get_application_stats, add_org, get_all_orgs, add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id, get_apps_by_staff
+from database import get_pet_stats, get_application_stats, add_org, get_all_orgs, add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id, get_apps_by_staff, get_org_name, get_mr_by_staff
 
 app = Flask(__name__)
 
@@ -14,6 +15,10 @@ def adopter():
 @app.route("/staff")
 def staff():
     return render_template("staff.html")
+
+@app.route("/vet")
+def vet():
+    return render_template("vet.html")
 
 @app.route("/browse_pets")
 def browse_pets():
@@ -57,8 +62,6 @@ def submit_application():
 # Viewing the pet application
 @app.get("/app/<app_id>")
 def app_view(app_id):
-    source = request.args.get("from", "menu")
-    source_staff_id = request.args.get("staff_id", None)
 
     app = get_app_by_id(app_id)
 
@@ -76,24 +79,125 @@ def app_view(app_id):
         if staff:
             staff_name = staff[2]   
 
-    return render_template("view_application.html", app=app, pet=pet, staff_name=staff_name, source=source, source_staff_id=source_staff_id)
+    return render_template("view_application.html", app=app, pet=pet, staff_name=staff_name)
 
 @app.get("/staff/<staff_id>")
 def staff_view(staff_id):
     staff = get_staff_by_id(staff_id)
-    apps = get_apps_by_staff(staff_id)
-    return render_template("view_staff.html", staff=staff, apps=apps)
 
+    org_name = None
+    if staff:
+        org_id = staff[1]
+        org_name = get_org_name(org_id)
+
+    apps = get_apps_by_staff(staff_id)
+    return render_template("view_staff.html", staff=staff, org_name=org_name, apps=apps)
+
+
+@app.get("/staff_app/<app_id>")
+def staff_app_view(app_id):
+    app = get_app_by_id(app_id)
+    if not app:
+        return "Application not found", 404
+    
+    pet = get_pet_by_id(app[3])
+    staff = get_staff_by_id(app[2])
+    return render_template("staff_app.html", app=app, pet=pet, staff=staff)
+
+@app.get("/vet_mr/<record_id>")
+def vet_mr_view(record_id):
+    conn = sqlite3.connect("tpch.sqlite")
+    cur = conn.cursor()
+
+    cur.execute("""
+                SELECT record_id, pet_id, staff_id, checkup_date, treatment, vaccination_status, next_appointment
+                FROM medical_record
+                WHERE record_id = ?""", (record_id,))
+    record = cur.fetchone()
+    conn.close()
+
+    pet = get_pet_by_id(record[1])
+    staff = get_staff_by_id(record[2])
+
+    return render_template("vet_mr.html", record=record, pet=pet, staff=staff)
+
+@app.get("/vet/<staff_id>")
+def vet_view(staff_id):
+    staff = get_staff_by_id(staff_id)
+
+    role = staff[3]
+    if role.lower() != "vet":
+        return f"""
+                <p style='font-size:40px; color:red;'>
+                    Access denied -- staff {staff_id} is not a vet.
+                </p>
+                <a href='/vet' style='font-size:40px;'>← Back to portal</a>
+                """
+    
+    org_name = get_org_name(staff[1])
+    records = get_mr_by_staff(staff_id)
+    return render_template("view_vet.html", staff=staff, org_name=org_name, records=records)
 
 @app.post("/search_app")
 def search_app():
     app_id = request.form["app_id"].strip()
-    return redirect(f"/app/{app_id}?from=adopter")
+    return redirect(f"/app/{app_id}")
 
 @app.post("/search_staff")
 def search_staff():
     staff_id = request.form["staff_id"].strip()
     return redirect(f"/staff/{staff_id}")
+
+@app.post("/search_vet")
+def search_vet():
+    staff_id = request.form["staff_id"].strip()
+    return redirect(f"/vet/{staff_id}")
+
+
+@app.post("/update_app")
+def update_app():
+    app_id = request.form["app_id"]
+    decision_date = request.form["decision_date"]
+    result = request.form["result"]
+
+    new_status = "Approved" if result == "Approve" else "Denied"
+
+    conn = sqlite3.connect("tpch.sqlite")
+    cur = conn.cursor()
+
+    cur.execute("""
+                UPDATE adoption_application
+                SET status = ?, decision_date = ?
+                WHERE app_id = ?""", (new_status, decision_date, app_id))
+    
+    conn.commit()
+    conn.close()
+
+    app_record = get_app_by_id(app_id)
+    staff_id = app_record[2]
+    
+    return redirect(f"/staff_app/{app_id}")
+
+@app.post("/update_mr")
+def update_mr():
+    record_id = request.form["record_id"]
+    checkup_date = request.form["checkup_date"]
+    treatment = request.form["treatment"]
+    vaccination_status = request.form["vaccination_status"]
+    next_appointment = request.form["next_appointment"]
+
+    conn = sqlite3.connect("tpch.sqlite")
+    cur = conn.cursor()
+
+    cur.execute("""
+                UPDATE medical_record
+                SET checkup_date = ?, treatment = ?, vaccination_status = ?, next_appointment = ?
+                WHERE record_id = ?""", (checkup_date, treatment,vaccination_status,next_appointment, record_id))
+    
+    conn.commit()
+    conn.close()
+
+    return redirect(f"/vet_mr/{record_id}")
 
 
 # ADMIN
@@ -126,6 +230,7 @@ def new_staff():
 
     # GET request → show form
     return render_template("new_staff.html")
+
 
 # ADMIN ORGANIZATIONS
 @app.route("/orgs")
