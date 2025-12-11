@@ -1,6 +1,6 @@
 import sqlite3
-from flask import Flask, render_template, request, redirect
-from database import get_pet_stats, get_application_stats, add_org, get_all_orgs, add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id, get_apps_by_staff, get_org_name, get_mr_by_staff
+from flask import Flask, render_template, request, redirect,jsonify
+from database import add_pet, del_pet, get_all_pets, get_pet_stats, get_application_stats, add_org, get_all_orgs, add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id, get_apps_by_staff, get_org_name, get_mr_by_staff
 
 app = Flask(__name__)
 
@@ -198,6 +198,42 @@ def update_mr():
     conn.close()
 
     return redirect(f"/vet_mr/{record_id}")
+
+# STAFF VIEW PETS
+@app.get("/staff_pet_view/<staff_id>")
+def staff_pet(staff_id):
+    pets = get_all_pets()  
+    staff = get_staff_by_id(staff_id) 
+    return render_template("staff_pet.html", pets=pets, staff=staff)
+
+
+#STAFF DELETE PET
+@app.route("/delete_pet/<pet_id>", methods=["POST"])
+def delete_pet(pet_id):
+    staff_id = request.args.get("staff_id")
+    del_pet(pet_id)
+    return redirect(f"/staff_pet_view/{staff_id}")
+
+#STAFF ADD PET
+@app.get("/add_pet/<staff_id>")
+def add_pet_form(staff_id):
+    staff = get_staff_by_id(staff_id)
+    return render_template("staff_add_pet.html", staff=staff)
+
+@app.post("/add_pet")
+def add_pet_submit():
+    name = request.form["name"]
+    species = request.form["species"]
+    breed = request.form["breed"]
+    age = request.form["age"]
+    gender = request.form["gender"]
+    org_id = request.form["org"]   # from form
+    staff_id = request.form["staff_id"]
+
+    add_pet(name, species, breed, age, gender, org_id)
+
+    return redirect(f"/staff_pet_view/{staff_id}")
+
 
 
 # ADMIN

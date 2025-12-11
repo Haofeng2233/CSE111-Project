@@ -38,6 +38,44 @@ def get_pet_by_id(pet_id):
     conn.close()
     return pet
 
+# DELETE PET
+def del_pet(pet_id):
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM pet WHERE pet_id = ?", (pet_id,))
+    conn.commit()
+    conn.close()
+    
+# ADD PET
+def add_pet(name, species, breed, age, gender, org_id):
+    conn = connect()
+    cur = conn.cursor()
+    
+    # Create new PET ID
+    cur.execute("SELECT pet_id FROM pet ORDER BY pet_id DESC LIMIT 1")
+    row = cur.fetchone()
+
+    if row is None:
+        next_num = 1
+    else:
+        last_id = row[0]
+        last_num = int(last_id.replace("P", ""))  # pet_id like P001
+        next_num = last_num + 1
+
+    pet_id = f"P{next_num:03d}"   # FIX YOUR PREFIX (previously APP??)
+
+    # INSERT including pet_id
+    cur.execute("""
+        INSERT INTO pet (pet_id, pet_name, species, breed, age, gender, availability, org_id)
+        VALUES (?, ?, ?, ?, ?, ?, 'Available', ?)
+    """, (pet_id, name, species, breed, age, gender, org_id))
+
+    conn.commit()
+    conn.close()
+
+
+
+
 def new_application(adopter_name, pet_id, reasoning, has_pets):
     conn = connect()
     cur = conn.cursor()

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adopter</title>
+    <style>
+        body {
+            font-size: 40px;
+        }
+        input, button {
+            font-size: 35px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <ul>
+        <a href="/staff/{{ staff[0] }}">←Back to Staff Page</a>
+    </ul>
+
+    <h1 style="font-size: 40px;">All pets</h1>
+    <br>
+
+    <a href="/add_pet/{{ staff[0] }}">
+        <button style="background-color: lightgreen;">Add New Pet</button>
+    </a>
+
+
+    <table border="1" cellpadding="10" cellspacing="0" style="font-size: 28px;">
+        <tr>
+            <th>Pet ID</th>
+            <th>Name</th>
+            <th>Species</th>
+            <th>Breed</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Status</th>
+            
+        </tr>
+
+        {% for pet in pets %}
+        <tr>
+            <td>{{ pet[0] }}</td>
+            <td>{{ pet[1] }}</td>
+            <td>{{ pet[2] }}</td>
+            <td>{{ pet[3] }}</td>
+            <td>{{ pet[4] }}</td>
+            <td>{{ pet[5] }}</td>
+            <td>{{ pet[6] }}</td>
+            <td style="background-color: red;">
+            <form action="/delete_pet/{{ pet[0] }}?staff_id={{ staff[0] }}" method="POST">
+                <button type="submit">Delete</button>
+            </form>
+
+
+</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <ul>
+        <li><a href="/" style="font-size: 28px;">Back to role selection</a></li>
+    </ul>
+
+</body>
+</html>
