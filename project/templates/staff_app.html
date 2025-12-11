@@ -29,29 +29,34 @@
         <p><strong>Has Existing Pets: </strong>{{ app[6] }}</p>
         <p><strong>Staff Note: </strong>{{ app[7] }}</p>
         <p><strong>Decision Date: </strong>{{ app[8] }}</p>
-
+        
         {% if app[4] == "Under Review" %}
             <h2>Decision: </h2>
             <form action="/update_app" method="POST">
                 <input type="hidden" name="app_id" value="{{ app[0] }}">
-
+            
                 <p>
                     <label>Decision Date: </label>
                     <input type="text" name="decision_date" placeholder="YYYY-MM-DD">
                 </p>
-
+            
+                <p>
+                    <label>Staff Note:</label><br>
+                    <textarea name="staff_notes" rows="4" cols="50" style="font-size: 30px;">{{ app[7] }}</textarea>
+                </p>
+            
                 <button type="submit" name="result" value="Approve" style="background-color: lightgreen;">
                     Approve
                 </button>
-
+            
                 <button type="submit" name="result" value="Deny" style="background-color: lightcoral;">
                     Deny
                 </button>
-
-
+            
             </form>
         {% endif %}
-
+        
+        
     {% else %}
         <p>Application not found.</p>
     {% endif %}

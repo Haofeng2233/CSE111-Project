@@ -153,12 +153,12 @@ def search_vet():
     staff_id = request.form["staff_id"].strip()
     return redirect(f"/vet/{staff_id}")
 
-
 @app.post("/update_app")
 def update_app():
     app_id = request.form["app_id"]
     decision_date = request.form["decision_date"]
     result = request.form["result"]
+    staff_note = request.form["staff_notes"]   
 
     new_status = "Approved" if result == "Approve" else "Denied"
 
@@ -166,17 +166,17 @@ def update_app():
     cur = conn.cursor()
 
     cur.execute("""
-                UPDATE adoption_application
-                SET status = ?, decision_date = ?
-                WHERE app_id = ?""", (new_status, decision_date, app_id))
-    
+        UPDATE adoption_application
+        SET status = ?, decision_date = ?, staff_notes = ?
+        WHERE app_id = ?
+    """, (new_status, decision_date, staff_note, app_id))
+
     conn.commit()
     conn.close()
 
-    app_record = get_app_by_id(app_id)
-    staff_id = app_record[2]
-    
     return redirect(f"/staff_app/{app_id}")
+
+
 
 @app.post("/update_mr")
 def update_mr():
