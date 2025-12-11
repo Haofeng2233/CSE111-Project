@@ -246,6 +246,34 @@ def manage_staff():
     staffs = get_all_staff()
     return render_template("manage_staff.html", staffs=staffs)
 
+@app.get("/edit_staff/<staff_id>")
+def edit_staff(staff_id):
+    staff = get_staff_by_id(staff_id)
+    return render_template("admin_edit_staff.html", staff=staff)
+
+@app.post("/update_staff")
+def update_staff():
+    staff_id = request.form["staff_id"]
+    staff_name = request.form["staff_name"]
+    staff_role = request.form["staff_role"]
+    staff_phone = request.form["staff_phone"]
+    staff_email = request.form["staff_email"]
+
+    conn = sqlite3.connect("tpch.sqlite")
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE staff
+        SET staff_name = ?, staff_role = ?, staff_phone = ?, staff_email = ?
+        WHERE staff_id = ?
+    """, (staff_name, staff_role, staff_phone, staff_email, staff_id))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/manage_staff")
+
+
 @app.route("/new_staff", methods=["GET", "POST"])
 def new_staff():
     if request.method == "POST":

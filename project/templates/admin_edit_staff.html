@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Staff</title>
+    <style>
+        body { font-size: 40px; }
+        input { font-size: 32px; padding: 10px; }
+        button { font-size: 35px; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>Edit Staff</h1>
+
+<form action="/update_staff" method="POST">
+    <input type="hidden" name="staff_id" value="{{ staff[0] }}">
+
+    <p>Name: <input type="text" name="staff_name" value="{{ staff[2] }}"></p>
+<p>
+    <label>Staff Role:</label>
+    <select name="staff_role" style="font-size: 30px; padding: 5px;">
+        <option value="admin" {% if staff[3] == "admin" %}selected{% endif %}>admin</option>
+        <option value="vet" {% if staff[3] == "vet" %}selected{% endif %}>vet</option>
+        <option value="adoption coordinator" {% if staff[3] == "adoption coordinator" %}selected{% endif %}>
+            adoption coordinator
+        </option>
+    </select>
+</p>
+    <p>Phone: <input type="text" name="staff_phone" value="{{ staff[4] }}"></p>
+    <p>Email: <input type="text" name="staff_email" value="{{ staff[5] }}"></p>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<br><br>
+<a href="/manage_staff">← Back to Staff Directory</a>
+
+</body>
+</html>

@@ -284,3 +284,4 @@ def get_pet_stats():
     conn.close()
     return results
 
+
