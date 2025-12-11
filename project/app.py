@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from database import add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id
+from database import add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id, get_apps_by_staff
 
 app = Flask(__name__)
 
@@ -10,6 +10,10 @@ def menu():
 @app.route("/adopter")
 def adopter():
     return render_template("adopter.html")
+
+@app.route("/staff")
+def staff():
+    return render_template("staff.html")
 
 @app.route("/browse_pets")
 def browse_pets():
@@ -53,6 +57,9 @@ def submit_application():
 # Viewing the pet application
 @app.get("/app/<app_id>")
 def app_view(app_id):
+    source = request.args.get("from", "menu")
+    source_staff_id = request.args.get("staff_id", None)
+
     app = get_app_by_id(app_id)
 
     pet = None
@@ -69,15 +76,24 @@ def app_view(app_id):
         if staff:
             staff_name = staff[2]   
 
-    return render_template("view_application.html", app=app, pet=pet, staff_name=staff_name)
+    return render_template("view_application.html", app=app, pet=pet, staff_name=staff_name, source=source, source_staff_id=source_staff_id)
 
-
+@app.get("/staff/<staff_id>")
+def staff_view(staff_id):
+    staff = get_staff_by_id(staff_id)
+    apps = get_apps_by_staff(staff_id)
+    return render_template("view_staff.html", staff=staff, apps=apps)
 
 
 @app.post("/search_app")
 def search_app():
     app_id = request.form["app_id"].strip()
-    return redirect(f"/app/{app_id}")
+    return redirect(f"/app/{app_id}?from=adopter")
+
+@app.post("/search_staff")
+def search_staff():
+    staff_id = request.form["staff_id"].strip()
+    return redirect(f"/staff/{staff_id}")
 
 
 # ADMIN
@@ -110,7 +126,6 @@ def new_staff():
 
     # GET request → show form
     return render_template("new_staff.html")
-
 
 
 if __name__ == "__main__":

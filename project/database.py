@@ -87,6 +87,17 @@ def get_staff_by_id(staff_id):
     conn.close()
     return staff
 
+def get_apps_by_staff(staff_id):
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("""
+                SELECT app_id, status
+                FROM adoption_application
+                WHERE staff_id = ?""", (staff_id,))
+    apps = cur.fetchall()
+    conn.close()
+    return apps
+
 # ADMIN FUNCTIONS
 def get_all_staff():
     conn = connect()

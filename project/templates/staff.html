@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Member</title>
+    <style>
+        body {
+            font-size: 40px;
+        }
+
+        .search-input {
+            font-size: 40px;
+            padding: 10px;
+        }
+
+        .search-btn {
+            font-size: 40px;
+            padding: 15px 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Staff Member</h1>
+
+    <form action="/search_staff" method="post">
+    <input type="text" name="staff_id" placeholder="Enter Staff ID" class="search-input">
+    <button type = "submit" class="search-btn">Search</button>
+    </form>
+
+    <ul>
+        <li><a href="/" style="font-size: 40px;">Back to role selection</a></li>
+    </ul>
+
+</body>
+
+</html>
