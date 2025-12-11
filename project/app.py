@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from database import get_all_pets, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id
+from database import add_staff, get_all_staff, get_all_available_pets, get_pet_by_id, new_application, get_app_by_id, get_staff_by_id
 
 app = Flask(__name__)
 
@@ -78,6 +78,38 @@ def app_view(app_id):
 def search_app():
     app_id = request.form["app_id"].strip()
     return redirect(f"/app/{app_id}")
+
+
+# ADMIN
+@app.route("/admin")
+def admin_page():
+    return render_template("admin.html")
+
+@app.route("/manage_staff")
+def manage_staff():
+    staffs = get_all_staff()
+    return render_template("manage_staff.html", staffs=staffs)
+
+@app.route("/new_staff", methods=["GET", "POST"])
+def new_staff():
+    if request.method == "POST":
+        staff_name = request.form["staff_name"]
+        org_id = request.form["org_id"]
+        staff_role = request.form["staff_role"]
+        staff_phone = request.form["staff_phone"]
+        staff_email = request.form["staff_email"]
+
+        add_staff(staff_name, org_id, staff_role, staff_phone, staff_email)
+
+        return f"""
+        <p style='font-size:40px;'>
+            Staff member <strong>{staff_name}</strong> added!<br><br>
+            <a href='/admin' style='font-size:40px;'>Back to Admin</a>
+        </p>
+        """
+
+    # GET request → show form
+    return render_template("new_staff.html")
 
 
 

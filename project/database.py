@@ -87,4 +87,40 @@ def get_staff_by_id(staff_id):
     conn.close()
     return staff
 
+# ADMIN FUNCTIONS
+def get_all_staff():
+    conn = connect()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM staff")
+    staffs = cur.fetchall()
 
+    conn.close()
+    return staffs
+
+def add_staff(staff_name, org_ID, staff_role, staff_phone, staff_email):
+    conn = connect()
+    cur = conn.cursor()
+    
+    # create new staff id
+    cur.execute("SELECT staff_id FROM staff ORDER BY staff_id DESC LIMIT 1")
+    row = cur.fetchone()
+
+    if row is None:
+        next_num = 1
+    else:
+        last_id = row[0]
+        last_num = int(last_id.replace("STF", ""))
+        next_num = last_num + 1
+
+    new_staff = f"STF{next_num:03d}"
+
+    # insert into DB
+    cur.execute("""
+                INSERT INTO staff
+                (staff_id, org_id, staff_name, staff_role, staff_phone, staff_email)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """, (new_staff, org_ID, staff_name, staff_role, staff_phone, staff_email))
+    
+    conn.commit()
+    conn.close()
+    return new_staff

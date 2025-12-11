@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <style>
+        body {
+            font-size: 40px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <h1>Staff Directory</h1>
+
+    <div class="menu">
+        <ul>
+            <li><a href="/new_staff" style="font-size: 40px;">Create new staff entry</a></li>
+
+    <table border="1" cellpadding="10" cellspacing="0" style="font-size: 28px;">
+        <tr>
+            <th>Staff ID</th>
+            <th>Org ID</th>
+            <th>Staff Name</th>
+            <th>Staff Role</th>
+            <th>Staff Phone</th>
+            <th>Staff Email</th>
+        </tr>
+
+        {% for staff in staffs %}
+        <tr>
+            <td>{{ staff[0] }}</td>
+            <td>{{ staff[1] }}</a></td>
+            <td>{{ staff[2] }}</td>
+            <td>{{ staff[3] }}</td>
+            <td>{{ staff[4] }}</td>
+            <td>{{ staff[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+            <li><a href="/" style="font-size: 40px;">Back to role selection</a></li>
+
+        </ul>
+    </div>
+
+    
+
+</body>
+</html>

@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS pet (
     age DECIMAL(2,0),
     gender CHAR(10),
     availability VARCHAR(20),
-    org_id CHAR(6) NOT NULL
+    org_id CHAR(6) NOT NULL,
+    staff_id CHAR(6) NOT NULL
 );
 
 
