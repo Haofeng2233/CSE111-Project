@@ -274,6 +274,36 @@ def update_staff():
     return redirect("/manage_staff")
 
 
+@app.route("/admin_portal")
+def admin_portal():
+    return render_template("admin_portal.html")
+
+
+@app.post("/search_admin")
+def search_admin():
+    staff_id = request.form["staff_id"].strip()
+
+    staff = get_staff_by_id(staff_id)
+
+    if not staff:
+        return f"""
+                <p style='font-size:40px; color:red;'>
+                    Staff ID {staff_id} not found.
+                </p>
+                <a href='/admin_portal' style='font-size:40px;'>← Back</a>
+                """
+    
+    role = staff[3].lower()
+    if role != "admin":
+        return f"""
+                <p style='font-size:40px; color:red;'>
+                    Access denied - Staff {staff_id} is not an admin.
+                </p>
+                <a href='/admin_portal' style='font-size:40px;'>← Back</a>
+                """
+    
+    return redirect("/admin")
+
 @app.route("/new_staff", methods=["GET", "POST"])
 def new_staff():
     if request.method == "POST":
